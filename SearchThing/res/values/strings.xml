@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SearchThing</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="search">探す</string>
+	<string name="entry">登録</string>
+	<string name="photo_img">撮影画像</string>
+	<string name="dialog_text">探したいもの</string>
+	<string name="dialog_edit">登録する物を入力してください</string>
+	<string name="entry_text">登録した物</string>
+	<string name="btn_add_new_text">追加</string>
+	<string name="add_text">追加するもの</string>
+	<string name="btn_delete_row">削除</string>
+	<string name="textv_simei">氏名</string>
+	<string name="search_img">探し物画像</string>
+	
+</resources>
