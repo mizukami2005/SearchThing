@@ -1,6 +1,8 @@
 package com.example.searchthing;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 import com.example.searchthing.R.drawable;
@@ -10,11 +12,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -52,6 +59,9 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 	private int getX,getY;
 	private int a = 130,b = 10,c,d;
 	GestureDetector gestureDetector;
+	private String path;
+	Bitmap before_photo_bmp,after_photo_bmp,mutableBitmap;
+	Matrix matrix;
 	
 	//private final static int WC = RelativeLayout.LayoutParams.WRAP_CONTENT;
 	
@@ -94,8 +104,10 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 		
 		
 		//registerForContextMenu(layout);
-		
-		
+//		Resources r = getResources();
+//		Bitmap defo = BitmapFactory.decodeResource(r, R.drawable.ic_launcher);
+//		
+//		((EntryImage) findViewById(R.id.EntryView)).setImage(defo);
 	}//end onCreate 
 	
 //	static public class MyView extends View{
@@ -156,7 +168,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 		    ContentValues values = new ContentValues();
 		    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/DCIM/cmr");
 		    //撮影画像を保存するパス
-		    String path = Environment.getExternalStorageDirectory().getPath() + "/DCIM/cmr/" + filename;
+		    path = Environment.getExternalStorageDirectory().getPath() + "/DCIM/cmr/" + filename;
 		    Log.e("file", "file:" + file );
 		    //フォルダが存在しなかったら場合フォルダ作成
 		    if (!file.exists()) {
@@ -181,10 +193,21 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		if (requestCode == 2) {
 			Log.e("phtoShoto","OK");
-			Intent photo_data = new Intent(MainActivity.this, EntryActivity.class);
-			photo_data.putExtra("data", mImageUri);
-			photo_data.putExtra("filename", filename);
-			startActivity(photo_data);
+			Log.e("data", "data:" + data);
+			try{
+				photoSetImage(mImageUri,path);
+				InputStream in = getContentResolver().openInputStream(mImageUri);
+				Bitmap img = BitmapFactory.decodeStream(in);
+				in.close();
+				//画像表示
+				((EntryImage) findViewById(R.id.EntryView)).setImage(photoSetImage(mImageUri,path));
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			//Intent photo_data = new Intent(MainActivity.this, EntryActivity.class);
+			//photo_data.putExtra("data", mImageUri);
+			//photo_data.putExtra("filename", filename);
+			//startActivity(photo_data);
 		}
 	}
 	//検索ボタン処理
@@ -193,9 +216,9 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 		@Override
 		public void onClick(View v) {
 			Log.e("Entry", "Entry");
-			
-			Intent intent_searchActivity = new Intent(MainActivity.this, SearchActivity.class);
-			startActivity(intent_searchActivity);
+			((EntryImage) findViewById(R.id.EntryView)).saveBitmap(path);
+//			Intent intent_searchActivity = new Intent(MainActivity.this, SearchActivity.class);
+//			startActivity(intent_searchActivity);
 		}
 	};
 	
@@ -291,4 +314,30 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 		Log.e("iii", "iii");
 		return false;
 	}
+	
+	//Uriをリサイズしてビットマップに変換
+		public Bitmap getBitmapFromUri(Uri imageUri, int sampleSize) throws IOException{
+			BitmapFactory.Options opts = new BitmapFactory.Options();
+			opts.inSampleSize = sampleSize;
+			Bitmap resizeBitmap = null;
+			ContentResolver conReslv = getContentResolver();
+			InputStream iStream = conReslv.openInputStream(imageUri);
+			resizeBitmap = BitmapFactory.decodeStream(iStream, null, opts);
+			iStream.close();
+			return resizeBitmap;
+		}
+		
+		public Bitmap photoSetImage(Uri getDataUri, String path){
+			try{
+				before_photo_bmp = getBitmapFromUri(getDataUri, 4);
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+				after_photo_bmp = Bitmap.createBitmap(before_photo_bmp,0,0,before_photo_bmp.getWidth(), before_photo_bmp.getHeight(), matrix, true);
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inMutable = true;
+				options.inSampleSize = 2;
+				mutableBitmap = BitmapFactory.decodeFile(path, options);
+				return mutableBitmap;
+		}
 }//end MainActivity

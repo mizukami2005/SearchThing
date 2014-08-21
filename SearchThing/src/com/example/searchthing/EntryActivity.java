@@ -43,6 +43,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.View.OnTouchListener;
 import android.view.Window;
@@ -56,7 +57,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class EntryActivity extends Activity implements GestureDetector.OnGestureListener,GestureDetector.OnDoubleTapListener{
+public class EntryActivity extends Activity implements GestureDetector.OnGestureListener,GestureDetector.OnDoubleTapListener, OnTouchListener, OnLongClickListener{
 	
 	private ImageView photo_img;	//撮影画像用
 	private Button entry_button;	//登録ボタン用
@@ -148,11 +149,25 @@ public class EntryActivity extends Activity implements GestureDetector.OnGesture
     private float imageX;
     private float imageY;
     
+    private boolean longClickFlg = false;
+    
+    int currentX;	
+    int currentY;
+    int offsetX;
+    int offsetY;
+    int x;
+	int y;
+	int count=0;
+	
+	private float tmpDensity;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.entry);
+		
+		tmpDensity = getResources().getDisplayMetrics().density;
 		
 		WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 		Display disp = wm.getDefaultDisplay();
@@ -182,7 +197,11 @@ public class EntryActivity extends Activity implements GestureDetector.OnGesture
 		
 		layout = (FrameLayout) findViewById(R.id.addFramelayout);
 		//layout.addView(new EntryActivityView(this));
-		gesDetect = new GestureDetector(photo_img.getContext(),this);
+		//photo_img.setLongClickable(true);
+		photo_img.setOnLongClickListener(this);
+		photo_img.setOnTouchListener(this);
+		
+		//gesDetect = new GestureDetector(photo_img.getContext(),this);
 		
 //		alertDialogBuilder = new AlertDialog.Builder(this);
 //		//アラートダイアログのタイトル設定
@@ -301,7 +320,7 @@ public class EntryActivity extends Activity implements GestureDetector.OnGesture
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				//canvas.drawBitmap(search_icon_bmp, 100, 100, null);
-				canvas.drawBitmap(search_icon_bmp, (int)(getX[0]*scaledDensity), (int)(getY[0]*scaledDensity), null);
+				canvas.drawBitmap(search_icon_bmp, x * tmpDensity, y * tmpDensity, null);
 				String entry_dlg_message = "";
 				for(int j = 0; j < entry_things.size(); j++){
 					Log.e("Hello", "登録したもの:" + entry_things.get(j));
@@ -668,7 +687,7 @@ public class EntryActivity extends Activity implements GestureDetector.OnGesture
 		Toast.makeText(this, "LongTap", Toast.LENGTH_LONG).show();
 		if(entrycnt == 0){
 			layout.addView(view[entrycnt]);
-			canvas.drawBitmap(search_icon_bmp, imageX - search_icon_bmp.getWidth() /2, imageY - search_icon_bmp.getHeight() /2, null);
+			canvas.drawBitmap(search_icon_bmp, 0 , 0, null);
 			//canvas.drawBitmap(search_icon_bmp, 10, 0, null);
 			//canvas.drawBitmap(search_icon_bmp, 700, 116, null);
 			//canvas.drawBitmap(search_icon_bmp, getX[0], getY[0], null);
@@ -993,4 +1012,61 @@ public class EntryActivity extends Activity implements GestureDetector.OnGesture
 		}//end if
 		super.onPrepareDialog(id, dialog);
 	}//end onPrepareDialog
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		// TODO Auto-generated method stub
+		x = (int) event.getRawX();
+		y = (int) event.getRawY();
+		layoutParams[0].setMargins(x, y, 0, 0);	
+		view[0].setLayoutParams(layoutParams[0]);
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_MOVE:
+			//長押しチェック
+			if(longClickFlg){
+				int diffX = offsetX - x;
+				int diffY = offsetY - y;
+				
+				currentX -= diffX;
+				currentY -= diffY;
+				layoutParams[0].setMargins(currentX, currentY, currentX + view[0].getWidth() , currentY + view[0].getHeight());	
+				view[0].setLayoutParams(layoutParams[0]);
+				offsetX = x;
+				offsetY = y;
+			}
+			break;
+		case MotionEvent.ACTION_DOWN:
+			currentX = view[0].getLeft();
+			currentY = view[0].getTop();
+			offsetX = x;
+			offsetY = y;
+			break;
+		case MotionEvent.ACTION_UP:
+			longClickFlg = false;
+		default:
+			break;
+		}
+		
+		Log.e("X", "X:" + x);
+		Log.e("X", "Y:" + y);
+		Log.e("point", "point:" + "top:" + view[0].getTop() + "right:" + view[0].getRight() + "buttom:" + view[0].getBottom()
+				+ "left:" + view[0].getLeft());
+		
+		return false;
+	}
+
+	@Override
+	public boolean onLongClick(View v) {
+		// TODO Auto-generated method stub
+		Log.e("LongClick", "LongClick");
+		longClickFlg = true;
+		
+		
+		if(count == 0){
+			layout.addView(view[0]);
+
+		}
+		count++;
+		return false;
+	}
 }

@@ -25,5 +25,11 @@
             android:text="@string/entry" />
 
     </LinearLayout>
+    
+    <com.example.searchthing.EntryImage 
+        android:id="@+id/EntryView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </LinearLayout>
