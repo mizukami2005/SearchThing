@@ -21,6 +21,13 @@
          
         
     </FrameLayout>
+    
+    <!-- <com.example.searchthing.DrawView
+        android:id="@+id/photo_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        and
+        /> -->
 
    
 
