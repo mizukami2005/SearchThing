@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.nio.channels.FileLockInterruptionException;
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +36,9 @@ public class EntryImage extends View{
 	Bitmap before_photo_bmp,after_photo_bmp,mutableBitmap;
 	Matrix matrix;
 	Context context;
+	String filename;
+	String x,y;
+	 
 	
 	public EntryImage(Context context){
 		super(context);
@@ -80,8 +84,17 @@ public class EntryImage extends View{
 			Point point = new Point();
 			point.x = (int)event.getX();
 			point.y = (int)event.getY();
+			x = Integer.toString(point.x);
+			y = Integer.toString(point.y);
 			mPointList.add(point);
 			invalidate();
+			
+			Intent intent_searchActivity = new Intent(getContext(),EntryForm.class);
+			intent_searchActivity.putExtra("filename", filename);
+			intent_searchActivity.putExtra("x", x);
+			intent_searchActivity.putExtra("y", y);
+			getContext().startActivity(intent_searchActivity);
+			//showDialog();
 			break;
 		default:
 			break;
@@ -138,6 +151,17 @@ public class EntryImage extends View{
 		invalidate();
 	}
 	
+	public void setFilename(String filename){
+		this.filename = filename;
+	}
+	
+//	public void setPoint(String x, String y){
+//		this.x = x;
+//		this.y = y;
+//	}
+	
+
+	
 	
 	
 	//Uriをリサイズしてビットマップに変換
@@ -164,5 +188,11 @@ public class EntryImage extends View{
 			options.inSampleSize = 2;
 			mutableBitmap = BitmapFactory.decodeFile(path, options);
 	}
+	
+	public void showDialog(){
+		Log.d("alert", "alert準備");
+	}
+	
+	
 	
 }//end EntryImage

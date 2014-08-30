@@ -15,6 +15,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -143,6 +144,9 @@ public class SearchActivity extends Activity implements GestureDetector.OnGestur
 			bm = BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
 			fis.close();
 			baos.close();
+//			Matrix matrix = new Matrix();
+//			matrix.postScale((float)0.3, (float)0.3);
+//			Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
 			//out.close();
 		} catch (FileNotFoundException e){
 			e.printStackTrace();

@@ -27,31 +27,39 @@ public final class R {
     public static final class id {
         public static final int EntryView=0x7f080003;
         public static final int LinearLayout1=0x7f080000;
-        public static final int action_settings=0x7f080012;
+        public static final int action_settings=0x7f080017;
         public static final int addFramelayout=0x7f080008;
-        public static final int addrow=0x7f08000b;
-        public static final int btn_add_new_row=0x7f080010;
-        public static final int btn_delete_mail=0x7f08000d;
+        public static final int addrow=0x7f08000d;
+        public static final int btn_add_new_row=0x7f080012;
+        public static final int btn_delete_mail=0x7f08000f;
         public static final int customDlg_id=0x7f080006;
+        public static final int edittext=0x7f08000b;
         public static final int entry=0x7f080002;
         public static final int entry_button=0x7f08000a;
         public static final int entrylayout=0x7f080007;
         public static final int layout_root=0x7f080004;
-        public static final int parent_view=0x7f08000e;
+        public static final int parent_view=0x7f080010;
         public static final int photo_img=0x7f080009;
+        public static final int resultimg=0x7f080016;
         public static final int search=0x7f080001;
-        public static final int search_img=0x7f080011;
+        public static final int search_img=0x7f080013;
+        public static final int searchentry=0x7f08000c;
+        public static final int searchform=0x7f080014;
+        public static final int searchformbtn=0x7f080015;
         public static final int textView1=0x7f080005;
-        public static final int text_mail=0x7f08000c;
-        public static final int textv_item=0x7f08000f;
+        public static final int text_mail=0x7f08000e;
+        public static final int textv_item=0x7f080011;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int custom_dialog=0x7f030001;
         public static final int entry=0x7f030002;
-        public static final int row=0x7f030003;
-        public static final int row_container=0x7f030004;
-        public static final int search=0x7f030005;
+        public static final int entry_form=0x7f030003;
+        public static final int row=0x7f030004;
+        public static final int row_container=0x7f030005;
+        public static final int search=0x7f030006;
+        public static final int search_form=0x7f030007;
+        public static final int search_result=0x7f030008;
     }
     public static final class menu {
         public static final int main=0x7f070000;
@@ -70,6 +78,7 @@ public final class R {
         public static final int photo_img=0x7f050005;
         public static final int search=0x7f050003;
         public static final int search_img=0x7f05000d;
+        public static final int searchformbtn=0x7f05000e;
         public static final int textv_simei=0x7f05000c;
     }
     public static final class style {

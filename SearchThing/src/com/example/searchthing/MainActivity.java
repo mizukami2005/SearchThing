@@ -200,11 +200,14 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 				Bitmap img = BitmapFactory.decodeStream(in);
 				in.close();
 				//画像表示
+				((EntryImage) findViewById(R.id.EntryView)).setFilename(filename);
 				((EntryImage) findViewById(R.id.EntryView)).setImage(photoSetImage(mImageUri,path));
+				//((EntryImage) findViewById(R.id.EntryView)).setPoint(x, y);
+				
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			//Intent photo_data = new Intent(MainActivity.this, EntryActivity.class);
+			//Intent photo_data = new Intent(MainActivity.this, EntryForm.class);
 			//photo_data.putExtra("data", mImageUri);
 			//photo_data.putExtra("filename", filename);
 			//startActivity(photo_data);
@@ -215,8 +218,12 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 		
 		@Override
 		public void onClick(View v) {
-			Log.e("Entry", "Entry");
-			((EntryImage) findViewById(R.id.EntryView)).saveBitmap(path);
+			Log.e("Search", "Search");
+			//((EntryImage) findViewById(R.id.EntryView)).saveBitmap(path);
+			Intent searchActivity = new Intent(MainActivity.this, SearchFormActivity.class);
+			startActivity(searchActivity);
+			
+			
 //			Intent intent_searchActivity = new Intent(MainActivity.this, SearchActivity.class);
 //			startActivity(intent_searchActivity);
 		}
@@ -339,5 +346,9 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 				options.inSampleSize = 2;
 				mutableBitmap = BitmapFactory.decodeFile(path, options);
 				return mutableBitmap;
+		}
+		
+		public void showDialog(){
+			Toast.makeText(this, "ダイアログ表示", Toast.LENGTH_LONG).show();
 		}
 }//end MainActivity

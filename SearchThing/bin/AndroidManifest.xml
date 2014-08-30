@@ -30,6 +30,9 @@
         <activity android:name="SearchActivity"></activity>
         <activity android:name="EntryActivity"
             android:screenOrientation="portrait"></activity>
+        <activity android:name="EntryForm"></activity>
+        <activity android:name="SearchFormActivity"></activity>
+        <activity android:name="SearchResultActivity"></activity>
     </application>
 
 </manifest>

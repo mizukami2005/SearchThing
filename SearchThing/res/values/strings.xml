@@ -15,5 +15,6 @@
 	<string name="btn_delete_row">削除</string>
 	<string name="textv_simei">氏名</string>
 	<string name="search_img">探し物画像</string>
+	<string name="searchformbtn">検索</string>
 	
 </resources>
